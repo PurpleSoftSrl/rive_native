@@ -25,10 +25,27 @@ allprojects {
 }
 
 apply plugin: "com.android.library"
-// AGP 9+: built-in Kotlin — do not apply kotlin-android (Google issue 438678642).
+
+// AGP 9+ forbids kotlin-android on library projects; AGP 8.x still needs it.
+def agpMajor = 8
+try {
+    agpMajor = (com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION ?: "8.0.0").split("\\.")[0] as int
+} catch (Throwable ignored) {
+    agpMajor = 8
+}
+
+if (agpMajor >= 9) {
+    logger.lifecycle("rive_native: AGP ${com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION} — using built-in Kotlin (no kotlin-android)")
+} else {
+    apply plugin: "kotlin-android"
+}
 
 android {
-    namespace = "app.rive.rive_native"
+    if (agpMajor >= 9) {
+        namespace = "app.rive.rive_native"
+    } else if (project.android.hasProperty("namespace")) {
+        namespace = "app.rive.rive_native"
+    }
 
     // Bumping the plugin compileSdk version requires all clients of this plugin
     // to bump the version in their app.
@@ -45,9 +62,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+    if (agpMajor >= 9) {
+        kotlin {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_11)
+            }
+        }
+    } else {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11.toString()
         }
     }
 
@@ -145,7 +168,7 @@ afterEvaluate {
     tasks.matching { it.name == "preBuild" }.configureEach {
         dependsOn tasks.named('runRiveNativeSetup')
     }
-    
+
     // Hook into externalNativeBuild tasks (CMake/NDK builds)
     tasks.matching { it.name.startsWith("externalNativeBuild") }.configureEach {
         dependsOn tasks.named('runRiveNativeSetup')
