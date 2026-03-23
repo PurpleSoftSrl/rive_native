@@ -211,10 +211,11 @@ class RiveSetup {
     // Assumed package root
     var root = Directory.current.uri;
 
-    // Resolved package location running from build scripts
-    if (root.path.endsWith('/macos/Pods/') ||
-        root.path.endsWith('/ios/Pods/')) {
-      root = root.resolve('../..');
+    // Resolved package location running from build scripts (cwd may omit trailing slash)
+    final p = root.toFilePath().replaceAll(RegExp(r'[/\\]+$'), '');
+    if (p.endsWith("${path.separator}macos${path.separator}Pods") ||
+        p.endsWith("${path.separator}ios${path.separator}Pods")) {
+      root = Uri.directory("$p${path.separator}..${path.separator}..");
     }
 
     final pubspecFile = File.fromUri(root.resolve('pubspec.yaml'));

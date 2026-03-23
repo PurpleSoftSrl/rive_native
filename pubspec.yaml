@@ -1,6 +1,6 @@
 name: rive_native
 # Pub base 0.1.4 + Android: AGP 8 (kotlin-android) and AGP 9+ (built-in Kotlin). Upstream only on pub.dev.
-version: 0.1.5+purplesoft.1
+version: 0.1.5+purplesoft.2
 homepage: https://rive.app
 repository: https://github.com/PurpleSoftSrl/rive_native
 description: Rive's native runtime and renderer for Flutter. PurpleSoft fork with Android Gradle config for AGP 8.x and 9+.

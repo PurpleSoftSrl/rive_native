@@ -54,6 +54,14 @@ Rive Flutter's native macOS plugin
     echo "[rive_native] You can run the setup manually with:"
     echo "  dart run rive_native:setup --verbose --platform macos"
 
+    # Same as iOS: dart run must run from Flutter app root (pubspec.yaml).
+    if [ -n "${PODS_ROOT:-}" ] && [ -f "${PODS_ROOT}/../../pubspec.yaml" ]; then
+      cd "${PODS_ROOT}/../.."
+    elif [ -n "${SRCROOT:-}" ] && [ -f "${SRCROOT}/../../pubspec.yaml" ]; then
+      cd "${SRCROOT}/../.."
+    fi
+    echo "[rive_native] Working directory for setup: $(pwd)"
+
     # macOS path to Flutter-Generated.xcconfig
     GENERATED_XCCONFIG="${SRCROOT}/../Flutter/ephemeral/Flutter-Generated.xcconfig"
     if [ -f "$GENERATED_XCCONFIG" ]; then
