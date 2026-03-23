@@ -3820,7 +3820,7 @@ class FFIRiveInternalViewModelInstanceList
     return listSize;
   }
 
-  syncValue() {
+  void syncValue() {
     if (_callback != null) {
       _callback!(null);
     }
@@ -4317,15 +4317,17 @@ class FFIRiveProfiler extends RiveProfiler {
 
   @override
   Uint8List? dump() {
-    final size = _profilerDump();
-    if (size == 0) return null;
+    final sizeFromDump = _profilerDump();
+    if (sizeFromDump == 0) return null;
 
     final ptr = _profilerGetBufferPtr();
     if (ptr == nullptr) return null;
 
     // Copy buffer then clear it on native side
     // First dump has HEADER, subsequent dumps have just FRAMES
-    final data = Uint8List.fromList(ptr.asTypedList(size));
+    final sizeFromNative = _profilerGetBufferSize();
+    final length = sizeFromNative > 0 ? sizeFromNative : sizeFromDump;
+    final data = Uint8List.fromList(ptr.asTypedList(length));
     _profilerFreeBuffer();
     return data;
   }

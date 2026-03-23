@@ -161,7 +161,8 @@ class FFIFlutterFactory extends FFIFactory implements Finalizable {
   static final _canvasLookup = HashMap<int, WeakReference<ui.Canvas>>();
   static final _vertexBufferLookup = HashMap<int, List<ui.Offset>>();
   static final _indexBufferLookup = HashMap<int, Uint16List>();
-  static get canvasLookup => _canvasLookup;
+  static HashMap<int, WeakReference<ui.Canvas>> get canvasLookup =>
+      _canvasLookup;
 
   static Timer? _deleteTimer;
   FFIFlutterFactory._() : super(_makeFlutterFactory()) {

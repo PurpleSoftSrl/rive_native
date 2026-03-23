@@ -3010,7 +3010,7 @@ class WebInternalViewModelInstanceList
         .toDartInt;
   }
 
-  syncValue() {
+  void syncValue() {
     if (_callback != null) {
       _callback!(null);
     }

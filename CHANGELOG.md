@@ -1,3 +1,9 @@
+## 0.1.5+purplesoft.1 (PurpleSoft fork)
+
+- Analyzer: `TickerMode.valuesOf` / `TickerModeData` (Flutter 3.35+), explicit types, profiler buffer size, `syncValue` return types.
+- Example: regenerated `android/` and `web/` via `flutter create` for local builds; `rive_native` path dependency and loose `pubspec` constraints aligned with internal apps.
+- `dependency_overrides` in consumers that use `git: url` without `ref` continue to track the default branch after `flutter pub get`.
+
 ## 0.1.4
 
 - Updates the Rive C++ runtime and renderer for the latest features, bug fixes, and performance improvements.

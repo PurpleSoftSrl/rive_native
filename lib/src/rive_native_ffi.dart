@@ -67,6 +67,7 @@ final void Function(Pointer<Void>) _destroyHeadlessRenderer = nativeLib
     .lookup<NativeFunction<Void Function(Pointer<Void>)>>(
         'destroyHeadlessRenderer')
     .asFunction();
+// ignore: unused_element
 final void Function(Pointer<Void>) _destroyHeadlessContext = nativeLib
     .lookup<NativeFunction<Void Function(Pointer<Void>)>>(
         'destroyHeadlessContext')
@@ -411,9 +412,11 @@ class _RiveNativeView extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
+    final TickerModeData mode = TickerMode.valuesOf(context);
     return _RiveNativeViewRenderObject(renderTexture, painter)
       ..devicePixelRatio = MediaQuery.devicePixelRatioOf(context)
-      ..tickerModeEnabled = TickerMode.of(context);
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 
   @override
@@ -421,11 +424,13 @@ class _RiveNativeView extends LeafRenderObjectWidget {
     BuildContext context,
     covariant _RiveNativeViewRenderObject renderObject,
   ) {
+    final TickerModeData mode = TickerMode.valuesOf(context);
     renderObject
       ..renderTexture = renderTexture
       ..painter = painter
       ..devicePixelRatio = MediaQuery.devicePixelRatioOf(context)
-      ..tickerModeEnabled = TickerMode.of(context);
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 
   @override

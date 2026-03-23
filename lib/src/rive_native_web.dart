@@ -1442,9 +1442,11 @@ class _RiveNativeWebView extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
+    final TickerModeData mode = TickerMode.valuesOf(context);
     return _RiveNativeWebViewRenderObject(renderTexture, painter)
       ..devicePixelRatio = MediaQuery.devicePixelRatioOf(context)
-      ..tickerModeEnabled = TickerMode.of(context);
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 
   @override
@@ -1452,11 +1454,13 @@ class _RiveNativeWebView extends LeafRenderObjectWidget {
     BuildContext context,
     covariant _RiveNativeWebViewRenderObject renderObject,
   ) {
+    final TickerModeData mode = TickerMode.valuesOf(context);
     renderObject
       ..renderTexture = renderTexture
       ..painter = painter
       ..devicePixelRatio = MediaQuery.devicePixelRatioOf(context)
-      ..tickerModeEnabled = TickerMode.of(context);
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 
   @override

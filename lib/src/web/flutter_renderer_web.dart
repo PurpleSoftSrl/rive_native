@@ -84,7 +84,8 @@ class WebFlutterFactory extends WebFactory {
   static final _canvasLookup = HashMap<int, WeakReference<ui.Canvas>>();
   static final _vertexBufferLookup = HashMap<js.JSBigInt, List<ui.Offset>>();
   static final _indexBufferLookup = HashMap<js.JSBigInt, Uint16List>();
-  static get canvasLookup => _canvasLookup;
+  static HashMap<int, WeakReference<ui.Canvas>> get canvasLookup =>
+      _canvasLookup;
 
   static final List<WebFlutterFactoryImage> _loadingImages = [];
   static final images = HashMap<js.JSBigInt, WebFlutterFactoryImage>();

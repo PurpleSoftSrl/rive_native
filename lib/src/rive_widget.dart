@@ -447,21 +447,23 @@ class FlutterRiveRendererWidget extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    final tickerModeValue = TickerMode.of(context);
+    final TickerModeData mode = TickerMode.valuesOf(context);
 
     return FlutterRiveRenderBox()
       ..painter = painter
-      ..tickerModeEnabled = tickerModeValue;
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 
   @override
   void updateRenderObject(
       BuildContext context, covariant FlutterRiveRenderBox renderObject) {
-    final tickerModeValue = TickerMode.of(context);
+    final TickerModeData mode = TickerMode.valuesOf(context);
 
     renderObject
       ..painter = painter
-      ..tickerModeEnabled = tickerModeValue;
+      ..tickerModeEnabled = mode.enabled
+      ..tickerForceFrames = mode.forceFrames;
   }
 }
 
@@ -510,6 +512,18 @@ abstract class RiveRenderBox<T extends RivePainter> extends RenderBox
         stopTicker();
       }
     }
+  }
+
+  /// When true, the animation [Ticker] uses [SchedulerBinding.scheduleForcedFrame]
+  /// while active (see [TickerModeData.forceFrames] / [Ticker.forceFrames]).
+  bool get tickerForceFrames => _tickerForceFrames;
+  bool _tickerForceFrames = false;
+  set tickerForceFrames(bool value) {
+    if (value == _tickerForceFrames) {
+      return;
+    }
+    _tickerForceFrames = value;
+    _ticker?.forceFrames = value;
   }
 
   // TODO (Gordon): Re-explore this from the old runtime.
@@ -622,6 +636,7 @@ abstract class RiveRenderBox<T extends RivePainter> extends RenderBox
 
     _validForMouseTracker = true;
     _ticker = Ticker(frameCallback);
+    _ticker!.forceFrames = _tickerForceFrames;
     if (tickerModeEnabled) {
       startTicker();
     }
